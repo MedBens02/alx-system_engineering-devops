@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# read a file and cut some parts
+
+f="/etc/passwd"
+
+while IFS= read -r l; do
+	echo "$l" | cut -d ':' -f1,3,6
+done < "$f"
