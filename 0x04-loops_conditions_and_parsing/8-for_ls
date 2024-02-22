@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# displays curr dir content without numbers
+
+for file in *; do
+	echo "$file" | cut -d '-' -f 2;
+done
