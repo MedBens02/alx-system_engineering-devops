@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Tell the story of passwd
+
+f="/etc/passwd"
+
+while IFS= read -r l; do
+	userN=$(echo "$l" | cut -d ':' -f1)
+	grpId=$(echo "$l" | cut -d ':' -f4)
+	homeDir=$(echo "$l" | cut -d ':' -f6)
+	cmdShell=$(echo "$l" | cut -d ':' -f7)
+	userId=$(echo "$l" | cut -d ':' -f3)
+	pass=$(echo "$l" | cut -d ':' -f2)
+	userInfo=$(echo "$l" | cut -d ':' -f5)
+
+	echo "The user $userN is part of the $grpId gang, lives in $homeDir and rides $cmdShell. $userId's place is protected by the passcode $pass, more info about the user here: $userInfo"
+done < "$f"
