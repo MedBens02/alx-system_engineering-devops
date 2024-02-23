@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Prints the lines containing bash from PID
+
+ps -aux | grep bash
