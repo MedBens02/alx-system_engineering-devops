@@ -23,7 +23,7 @@ int infinite_while(void)
  *
  * Return: Always 0 (Success)
  */
-int main()
+int main(void)
 {
 	pid_t pid;
 	int i = 0;
