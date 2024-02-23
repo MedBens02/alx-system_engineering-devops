@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 # kills task 4 process
 
-proc="(pgrep -f 4-to_infinity_and_beyond)"
+proc="pgrep -f 4-to_infinity_and_beyond"
 kill $proc
