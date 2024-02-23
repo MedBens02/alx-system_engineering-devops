@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # Prints the list of curr processes
 
-ps
+ps -auxf
