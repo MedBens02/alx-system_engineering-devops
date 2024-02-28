@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Pings an IP 5 times
+
+# The IP
+target="${1}"
+
+if ! [ "$target" ]; then
+	echo "Usage: $(basename "$0") {IP_ADDRESS}"
+else
+	ping -c 5 "${target}"
+fi
