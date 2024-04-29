@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Setup haproxy
+
+# Update package lists and install software-properties-common if not already installed
+apt-get update
+apt-get install -y software-properties-common
+
+# Install the latest version of HAproxy
+apt-get install -y haproxy
+
+# Ensure HAproxy is enabled to run at startup
+echo "ENABLED=1" > /etc/default/haproxy
+      
+# Append configuration for round-robin load balancing between two web servers                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+cat <<EOF >> /etc/haproxy/haproxy.cfg
+listen load_balancer
+   bind *:80
+   mode http
+   balance roundrobin
+   option httpclose
+   option forwardfor
+   server 531093-web-01 100.25.24.20:80 check
+   server 531093-web-02 34.227.91.92:80 check
+EOF
+
+service haproxy start
