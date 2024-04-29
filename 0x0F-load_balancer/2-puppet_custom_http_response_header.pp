@@ -1,55 +1,58 @@
 # Configure Nginx with custom HTTP response header and custom pages in Puppet
 
-# Ensure the package list is always updated before attempting installation
-exec { 'update-system':
-  command     => '/usr/bin/apt-get update',
-  path        => ['/bin', '/usr/bin'],
-  logoutput   => true,
-  unless      => "apt-cache policy | grep 'nginx'",
-  before      => Package['nginx'],
-}
-
-# Install Nginx
+# Ensure Nginx is installed
 package { 'nginx':
-  ensure  => installed,
-  require => Exec['update-system'],
+  ensure => installed,
 }
 
-# Configure the main site
+# Ensure the HTML directory exists
+file { '/etc/nginx/html':
+  ensure => directory,
+  require => Package['nginx'],
+}
+
+# Create the main index.html
+file { '/etc/nginx/html/index.html':
+  ensure  => present,
+  content => "Hello World!\n",
+  require => File['/etc/nginx/html'],
+}
+
+# Create the custom 404 page
+file { '/etc/nginx/html/404.html':
+  ensure  => present,
+  content => "Ceci n'est pas une page\n",
+  require => File['/etc/nginx/html'],
+}
+
+# Configure Nginx server with a custom configuration
 file { '/etc/nginx/sites-available/default':
-  ensure  => file,
-  content => template('nginx/default.erb'),
+  ensure  => present,
+  content => "server {
+    listen 80;
+    listen [::]:80 default_server;
+    root /etc/nginx/html;
+    index index.html index.htm;
+    add_header X-Served-By $hostname;
+
+    location /redirect_me {
+        return 301 https://github.com/MedBens02;
+    }
+
+    error_page 404 /404.html;
+    location /404 {
+        root /etc/nginx/html;
+        internal;
+    }
+  }\n",
   require => Package['nginx'],
   notify  => Service['nginx'],
 }
 
-# Ensure Nginx is running and enabled to start at boot
+# Ensure Nginx service is running and enabled
 service { 'nginx':
-  ensure => running,
-  enable => true,
+  ensure    => running,
+  enable    => true,
+  subscribe => File['/etc/nginx/sites-available/default'],
 }
 
-# Template for /etc/nginx/sites-available/default
-file {'nginx/default.erb':
-  path    => "/etc/puppet/modules/nginx/templates/default.erb",
-  content => @(EOF)
-    server {
-      listen 80;
-      listen [::]:80 default_server;
-      root /var/www/html;
-      index index.html index.htm;
-
-      add_header X-Served-By $::hostname;
-
-      location /redirect_me {
-        rewrite ^/redirect_me https://github.com/MedBens02 permanent;
-      }
-
-      error_page 404 /404.html;
-      location = /404.html {
-        root /var/www/html;
-        internal;
-      }
-    }
-    | EOF
-}
