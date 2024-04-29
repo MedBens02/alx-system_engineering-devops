@@ -33,7 +33,7 @@ file { '/etc/nginx/sites-available/default':
     listen [::]:80 default_server;
     root /etc/nginx/html;
     index index.html index.htm;
-    add_header X-Served-By $hostname;
+    add_header X-Served-By \$hostname;
 
     location /redirect_me {
         return 301 https://github.com/MedBens02;
