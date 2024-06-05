@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+curl -X GET \
+  'https://api.datadoghq.com/api/v1/dashboard' \
+  -H 'Content-Type: application/json' \
+  -H 'DD-API-KEY: KEY' \
+  -H 'DD-APPLICATION-KEY: KEY'
