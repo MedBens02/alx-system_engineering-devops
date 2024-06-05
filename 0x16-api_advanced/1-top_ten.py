@@ -21,6 +21,6 @@ def top_ten(subreddit):
         children = results.get("children")
         if len(children) > 1 and children[0].get("data").get("stickied"):
             children = children[1:]  # Exclude the sticky post if it's present
-        [print(c.get("data").get("title")) for c in children[:10]]  # Print only the first 10
+        [print(c.get("data").get("title")) for c in children[:10]]
     else:
-        print("None") 
+        print("None")
