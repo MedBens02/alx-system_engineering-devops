@@ -8,7 +8,7 @@ def number_of_subscribers(subreddit):
     resp = requests.get(
         "https://www.reddit.com/r/{}/about.json".format(subreddit),
         headers={"User-Agent": "linux:0x16.api.advanced:v1.0.0 (by /u/bensm02)"},
-        allow_redirects=False,
+        allow_redirects=False
     )
 
     if resp.status_code == 404:
